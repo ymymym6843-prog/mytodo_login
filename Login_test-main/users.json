@@ -1,0 +1,23 @@
+{
+  "users": [
+    {
+      "name": "관리자",
+      "nickname": "admin",
+      "gender": "other",
+      "phone": "010-0000-0000",
+      "address": "판교 데이터센터",
+      "email": "admin@example.com",
+      "passwordHash": "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4",
+      "joinDate": "2024. 1. 1.",
+      "profileImage": null,
+      "securityQuestion": "가장 기억에 남는 여행지는 어디인가요?",
+      "securityAnswer": "제주도",
+      "loginHistory": [
+        {
+          "time": "2024. 5. 20. 오후 3:00:00",
+          "device": "Test Server"
+        }
+      ]
+    }
+  ]
+}

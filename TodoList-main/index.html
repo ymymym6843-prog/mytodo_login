@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="light-mode">
+    <div class="container">
+        <div class="header-controls">
+            <h1>To Do List</h1>
+            <!-- 라이트/다크 토글 버튼 -->
+            <button id="themeToggleBtn" class="theme-toggle">다크 모드</button>
+        </div>
+        
+        <!-- 검색 + 필터 -->
+        <div class="controls-bar">
+            <input type="text" id="taskSearchInput" placeholder="할 일 검색...">
+            <div class="filter-buttons">
+                <button class="filter-btn" data-filter="all">전체</button>
+                <button class="filter-btn" data-filter="work">업무</button>
+                <button class="filter-btn" data-filter="personal">개인</button>
+                <button class="filter-btn" data-filter="exercise">운동</button>
+                <button class="filter-btn" data-filter="rest">휴식</button>
+            </div>
+            <div class="date-view-controls">
+                <button class="date-view-btn" data-view-type="monthly">Monthly</button>
+                <button class="date-view-btn" data-view-type="weekly">Weekly</button>
+                <button class="date-view-btn" data-view-type="daily">Daily</button>
+            </div>
+        </div>
+
+        <!-- 할 일 입력 -->
+        <div class="input-area">
+            <input type="text" id="taskInput" placeholder="할 일을 입력하세요.">
+            <button id="addTaskBtn">추가</button>
+        </div>
+        
+        <!-- 카테고리 ~ 날짜 + 시간 (작게) -->
+        <div class="task-details-area">
+            <select id="categorySelect">
+                <option value="all">카테고리</option>
+                <option value="work">업무</option>
+                <option value="personal">개인</option>
+                <option value="exercise">운동</option>
+                <option value="rest">휴식</option>
+            </select>
+
+            <select id="repetitionSelect">
+                <option value="none">반복 없음</option>
+                <option value="daily">매일</option>
+                <option value="weekdays">평일</option>
+                <option value="weekly">매주</option>
+                <option value="monthly">매달</option>
+            </select>
+
+            <select id="prioritySelect">
+                <option value="none">우선순위</option>
+                <option value="high">상</option>
+                <option value="medium">중</option>
+                <option value="low">하</option>
+            </select>
+
+            <select id="emojiSelect">
+                <option value="">이모티콘</option>
+                <option value="😀">😀</option>
+                <option value="🙂">🙂</option>
+                <option value="😐">😐</option>
+                <option value="😢">😢</option>
+                <option value="😡">😡</option>
+            </select>
+
+            <input type="date" id="dueDateInput">
+            <div class="time-input-group">
+                <select id="dueAmPmInput">
+                    <option value="am">오전</option>
+                    <option value="pm">오후</option>
+                </select>
+                <input type="text" id="dueTimeInput" placeholder="시간 (예: 10:30)">
+            </div>
+        </div>
+
+        <!-- 캘린더 + 선택 날짜 일정 -->
+        <div class="calendar-and-schedule-wrapper">
+            <div class="calendar-section">
+                <div class="calendar-header">
+                    <button id="prevMonthBtn" class="nav-btn">&lt;</button>
+                    <h2 id="currentMonthYear"></h2>
+                    <button id="nextMonthBtn" class="nav-btn">&gt;</button>
+                </div>
+
+                <div class="calendar-grid">
+                    <!-- 요일 헤더 -->
+                    <div class="day-header">일</div>
+                    <div class="day-header">월</div>
+                    <div class="day-header">화</div>
+                    <div class="day-header">수</div>
+                    <div class="day-header">목</div>
+                    <div class="day-header">금</div>
+                    <div class="day-header">토</div>
+                    <!-- 날짜 칸은 JS에서 채움 -->
+                </div>
+            </div>
+
+            <div id="dailyScheduleDisplay" class="daily-schedule-display">
+                <h3>선택한 날짜의 일정</h3>
+                <ul id="dailyTaskList"></ul>
+            </div>
+        </div>
+
+        <!-- 전체 일정 리스트 -->
+        <ul id="taskList"></ul>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

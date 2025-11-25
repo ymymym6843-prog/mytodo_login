@@ -1,0 +1,6 @@
+# VS Code editor specific files
+.vscode/
+.history/
+
+# OS generated files
+.DS_Store

@@ -1,0 +1,438 @@
+/* 
+  전역 스타일 및 색상 테마 설정
+  :root 안에 CSS 변수(--변수명)를 정의해두면
+  라이트/다크 모드를 전환할 때 값을 바꾸기만 하면 됨
+*/
+
+/* 라이트 모드 기본 색상 (민트, 하늘 계열 파스텔톤) */
+:root {
+  --bg-color: #e8f9ff;
+  --card-bg: #ffffff;
+  --text-color: #222222;
+  --accent-color: #43c3b6; /* 민트 느낌 */
+  --accent-color-soft: #a0e6dd;
+  --border-color: #d0e5f2;
+  --error-color: #e74c3c;
+  --info-color: #555555;
+}
+
+/* body[data-theme="dark"] 일 때는 다크 모드 색상으로 덮어쓰기 */
+body[data-theme="dark"] {
+  --bg-color: #050818;        /* 밤하늘 느낌의 진한 남색 */
+  --card-bg: #14182a;         /* 어두운 카드 배경 */
+  --text-color: #f4f4ff;      /* 밝은 텍스트 */
+  --accent-color: #7a5cff;    /* 바이올렛 계열 포인트 */
+  --accent-color-soft: #3f4caa;
+  --border-color: #303654;
+  --info-color: #cfd3ff;
+}
+
+/* 전체 페이지 공통 스타일 */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans KR",
+    "Apple SD Gothic Neo", sans-serif;
+  background: var(--bg-color);
+  color: var(--text-color);
+}
+
+/* 앱 전체 컨테이너 : 가운데 정렬 */
+.app-container {
+  min-height: 100vh; /* 화면 높이 전체 채우기 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px;
+}
+
+/* 헤더 영역 */
+.app-header {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.app-title {
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+/* 테마 토글 버튼 */
+.theme-toggle-btn {
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-color);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+/* 탭 네비게이션 */
+.tab-nav {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 8px 0;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-color);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.tab-btn.active {
+  background: var(--accent-color-soft);
+  border-color: var(--accent-color);
+}
+
+/* 메인 영역 */
+.app-main {
+  width: 100%;
+  max-width: 480px;
+}
+
+/*
+  각 섹션(로그인/회원가입/프로필 설정)을 카드 형태로 표현
+  width: 90%로 설정하여 모바일에서도 자연스럽게 보이도록
+*/
+.form-card {
+  width: 90%;           /* 요청: width 90% */
+  margin: 0 auto;       /* 중앙 정렬 */
+  background: var(--card-bg);
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+/* 각 섹션 숨김/보이기 제어 */
+.view-section {
+  display: none;
+}
+
+.view-section.active {
+  display: block;
+}
+
+/* 섹션 제목 */
+.form-card h2 {
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+/* 입력 필드 공통 */
+.form-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+}
+
+.form-field span {
+  margin-bottom: 4px;
+}
+
+/* 텍스트 입력, 셀렉트 공통 스타일 */
+.form-field input,
+.form-field select {
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--text-color);
+  font-size: 0.9rem;
+}
+
+/* 다크모드에서 select 드롭다운 가독성 개선 */
+body[data-theme="dark"] .form-field select {
+  background-color: var(--card-bg);
+}
+
+
+
+/* 입력 필드 하단의 안내 문구 */
+.field-rule {
+  font-size: 0.75rem;
+  color: var(--info-color);
+  margin: -6px 0 10px 4px;
+}
+/* 인라인 입력(텍스트 + 버튼 같은 줄) */
+.inline-input {
+  display: flex;
+  flex-wrap: wrap; /* 화면이 좁을 때 줄바꿈 허용 */
+  gap: 6px;
+}
+
+/* 비밀번호 입력 + 눈 아이콘을 감싸는 래퍼 */
+.password-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.password-wrapper input {
+  flex: 1;
+}
+
+.eye-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+/* 체크박스 필드 */
+.checkbox-field {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+}
+
+/* 버튼 스타일 */
+.primary-btn,
+.secondary-btn,
+.danger-btn,
+.small-btn,
+.text-btn {
+  cursor: pointer;
+  border-radius: 999px;
+  border: none;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+}
+
+/* 주요 버튼(예: 로그인, 회원가입) */
+.primary-btn {
+  width: 100%;
+  background: var(--accent-color);
+  color: #ffffff;
+  margin-top: 4px;
+}
+
+/* 서브 버튼 */
+.secondary-btn {
+  background: var(--accent-color-soft);
+  color: var(--text-color);
+  margin-top: 6px;
+}
+
+/* 위험(회원탈퇴) 버튼 */
+.danger-btn {
+  background: var(--error-color);
+  color: #ffffff;
+}
+
+/* 작은 버튼 (중복체크 등) */
+.small-btn {
+  background: var(--accent-color-soft);
+  color: var(--text-color);
+  white-space: nowrap;
+}
+
+/* 텍스트 버튼(밑줄만 있는 형태) */
+.text-btn {
+  background: transparent;
+  color: var(--accent-color);
+  padding: 0;
+  text-decoration: underline;
+}
+
+/* 헬퍼 링크 영역 */
+.helper-links {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+
+/* 정보 / 에러 메시지 */
+.info-msg {
+  font-size: 0.8rem;
+  color: var(--info-color);
+}
+
+.error-msg {
+  font-size: 0.8rem;
+  color: var(--error-color);
+}
+
+/* 비밀번호 강도 표시 바 */
+.password-strength {
+  margin: 6px 0 10px;
+}
+
+.strength-bar {
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background: #e0e0e0;
+  overflow: hidden;
+}
+
+.strength-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--error-color); /* 기본은 약함(빨간색 느낌) */
+  transition: width 0.3s ease, background 0.3s ease;
+}
+
+/* 정보 박스(약관, 규칙 등) */
+.info-box,
+.terms-box {
+  margin-top: 8px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.6);
+}
+
+body[data-theme="dark"] .info-box,
+body[data-theme="dark"] .terms-box {
+  background: rgba(10, 12, 30, 0.8);
+}
+
+/* 약관 텍스트 */
+.terms-text {
+  font-size: 0.8rem;
+  margin-bottom: 6px;
+}
+
+/* 약관 내용 스크롤 박스 */
+.terms-content {
+  height: 80px;
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
+  padding: 8px;
+  font-size: 0.8rem;
+  margin-bottom: 8px;
+}
+/* 서브 카드(비밀번호 재설정, 잠금해제 폼 등) */
+.sub-card {
+  margin-top: 10px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  border: 1px dashed var(--border-color);
+}
+
+/* 숨김 클래스 */
+.hidden {
+  display: none;
+}
+
+/* 프로필 설정 스타일 */
+.profile-photo-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.profile-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-color-soft), var(--accent-color));
+  border: 2px solid var(--card-bg);
+  margin-bottom: 8px;
+  background-size: cover;
+  background-position: center;
+}
+
+/* 프로필 사진 업로드용 label */
+.small-file-label {
+  font-size: 0.8rem;
+  border-radius: 999px;
+  padding: 6px 12px;
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+}
+
+/* 실제 input[type="file"]는 숨기기 */
+.small-file-label input[type="file"] {
+  display: none;
+}
+
+/* danger 영역 (회원탈퇴) */
+.danger-zone {
+  margin-top: 12px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* 구분선 */
+hr {
+  border: none;
+  border-top: 1px solid var(--border-color);
+  margin: 10px 0;
+}
+
+/* 로그인 기록 테이블 스타일 */
+.login-history-table-wrapper {
+  max-height: 150px; /* 테이블이 너무 길어지지 않도록 최대 높이 지정 */
+  overflow-y: auto;  /* 내용이 넘치면 스크롤바 표시 */
+  margin-top: 8px;
+}
+
+#loginHistoryTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+
+#loginHistoryTable th,
+#loginHistoryTable td {
+  padding: 6px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* 주소 검색 UI 래퍼 스타일 */
+.address-search-wrap {
+  display: none; /* 평소에는 숨김 */
+  width: 100%;
+  height: 400px; /* 검색 UI 높이 */
+  border: 1px solid var(--border-color);
+  margin-top: 8px;
+}
+
+
+#loginHistoryTable th {
+  font-weight: bold;
+}
+/* 반응형 : 아주 작은 화면에서 글자 크기 살짝 줄이기 */
+@media (max-width: 360px) {
+  .app-title {
+    font-size: 1rem;
+  }
+  .form-card {
+    padding: 16px;
+}
+/* 회원가입 성공 시 부드러운 애니메이션 (선택 사항) */
+.signup-success-animate {
+  animation: fadePulse 0.6s ease;
+}
+
+@keyframes fadePulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.02); opacity: 0.9; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+}

@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <!-- 모바일 화면에서 보기 좋게 만드는 설정 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My diary</title>
+
+  <!-- 외부 CSS 파일 연결 -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body data-theme="light">
+  <!-- 
+    전체를 감싸는 컨테이너
+    라이트/다크 모드 배경색, 정렬 등을 여기서 조절
+  -->
+  <div class="app-container">
+
+    <!-- 상단 헤더 영역 : 로고/제목 + 테마 전환 스위치 -->
+    <header class="app-header">
+      <h1 class="app-title">My diary </h1>
+
+      <!-- 라이트 / 다크 모드 전환 스위치 -->
+      <button id="themeToggleBtn" class="theme-toggle-btn">
+        🌞 라이트 모드
+      </button>
+    </header>
+
+    <!-- 네비게이션 탭 : 로그인 / 회원가입 / 프로필 설정 -->
+    <nav class="tab-nav">
+      <!-- data-target 속성으로 어떤 화면을 보여줄지 JS에서 제어 -->
+      <button class="tab-btn active" data-target="login-section">로그인</button>
+      <button class="tab-btn" data-target="signup-section">회원가입</button>
+      <button class="tab-btn" data-target="profile-section">프로필 설정</button>
+    </nav>
+
+    <!-- 메인 컨텐츠 영역 -->
+    <main class="app-main">
+      <!-- 1) 로그인 섹션 -->
+      <section id="login-section" class="view-section active">
+        <div class="form-card">
+          <h2>로그인</h2>
+
+          <!-- 이메일 입력 -->
+          <label class="form-field">
+            <span>이메일</span>
+            <input type="email" id="loginEmail" placeholder="example@example.com" />
+          </label>
+
+          <!-- 비밀번호 입력 + 눈 아이콘(비밀번호 보기/숨기기 토글) -->
+          <label class="form-field">
+            <span>비밀번호</span>
+            <div class="password-wrapper">
+              <input type="password" id="loginPassword" placeholder="비밀번호를 입력하세요" />
+              <!-- 눈 아이콘 : 단순 텍스트 아이콘으로 구현 (CSS로 모양 다듬기 가능) -->
+              <button type="button" class="eye-btn" data-target-input="loginPassword">
+                👁
+              </button>
+            </div>
+          </label>
+
+          <!-- 로그인 상태 유지하기(remember me) 체크박스 -->
+          <label class="checkbox-field">
+            <input type="checkbox" id="rememberMe" />
+            <span>로그인 상태 유지하기</span>
+          </label>
+
+          <!-- 로그인 버튼 -->
+          <button id="loginBtn" class="primary-btn">로그인</button>
+
+          <!-- 비밀번호 찾기 / 계정 잠금 해제 안내 -->
+          <div class="helper-links">
+            <button type="button" id="showResetPassword" class="text-btn">비밀번호 찾기</button>
+            <!-- 잠금 해제 버튼은 계정이 잠겼을 때만 보이도록 JS에서 제어 -->
+            <button type="button" id="showUnlockForm" class="text-btn hidden">계정 잠금 해제</button>
+          </div>
+
+          <!-- 잘못된 로그인 시도 횟수 및 경고 문구 표시 영역 -->
+          <p id="loginErrorMsg" class="error-msg"></p>
+          <p id="loginAttemptInfo" class="info-msg"></p>
+
+          <!-- 비밀번호 재설정 폼 (초기에는 숨김) -->
+          <div id="resetPasswordSection" class="sub-card hidden">
+            <h3>비밀번호 재설정</h3>
+            <label class="form-field">
+              <span>가입 이메일</span>
+              <input type="email" id="resetEmail" placeholder="가입하신 이메일을 입력하세요" />
+            </label>
+            <label class="form-field">
+              <span>휴대전화번호</span>
+              <input type="tel" id="resetPhone" placeholder="예: 010-1234-5678" />
+            </label>
+            <label class="form-field">
+              <span>새 비밀번호</span>
+              <div class="password-wrapper">
+                <input type="password" id="resetNewPassword" placeholder="새 비밀번호" />
+                <button type="button" class="eye-btn" data-target-input="resetNewPassword">
+                  👁
+                </button>
+              </div>
+            </label>
+            <label class="form-field">
+              <span>새 비밀번호 확인</span>
+              <input type="password" id="resetNewPasswordConfirm" placeholder="새 비밀번호 확인" />
+            </label>
+            <label class="form-field">
+              <span>가입 시 선택한 질문</span>
+              <select id="resetSecurityQuestion"></select>
+              <span>답변</span>
+              <input type="text" id="resetSecurityAnswer" placeholder="질문에 대한 답변" />
+            </label>
+            <button id="resetPasswordBtn" class="secondary-btn">비밀번호 재설정</button>
+            <p id="resetPasswordMsg" class="info-msg"></p>
+          </div>
+
+          <!-- 계정 잠금 해제용 본인 인증 폼 (이메일 + 휴대전화 확인) -->
+          <div id="unlockSection" class="sub-card hidden">
+            <h3>계정 잠금 해제</h3>
+            <label class="form-field">
+              <span>가입 이메일</span>
+              <input type="email" id="unlockEmail" placeholder="가입 이메일" />
+            </label>
+            <label class="form-field">
+              <span>휴대전화번호</span>
+              <input type="tel" id="unlockPhone" placeholder="가입 시 입력한 휴대전화번호" />
+            </label>
+            <button id="unlockBtn" class="secondary-btn">본인 인증 후 잠금 해제</button>
+            <p id="unlockMsg" class="info-msg"></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2) 회원가입 섹션 -->
+      <section id="signup-section" class="view-section">
+        <div class="form-card">
+          <h2>회원가입</h2>
+
+          <!-- 이름 -->
+          <label class="form-field">
+            <span>이름</span>
+            <input type="text" id="signupName" placeholder="이름을 입력하세요" />
+          </label>
+
+          <!-- 닉네임 + 중복 체크 버튼 -->
+          <label class="form-field">
+            <span>닉네임</span>
+            <div class="inline-input">
+              <input type="text" id="signupNickname" placeholder="닉네임을 입력하세요" />
+              <button type="button" id="checkNicknameBtn" class="small-btn">중복체크</button>
+            </div>
+          </label>
+
+          <!-- 성별 -->
+          <label class="form-field">
+            <span>성별</span>
+            <select id="signupGender">
+              <option value="">선택하세요</option>
+              <option value="female">여성</option>
+              <option value="male">남성</option>
+              <option value="other">기타 / 선택하지 않음</option>
+            </select>
+          </label>
+
+          <!-- 휴대전화번호 -->
+          <label class="form-field">
+            <span>휴대전화번호</span>
+            <input type="tel" id="signupPhone" placeholder="010-1234-5678" />
+            <div class="inline-input">
+              <button type="button" id="sendVerificationCodeBtn" class="small-btn">인증번호 받기</button>
+            </div>
+            <div id="phoneVerificationArea" class="inline-input hidden">
+              <input type="text" id="phoneVerificationCode" placeholder="인증번호 6자리" />
+              <button type="button" id="confirmVerificationCodeBtn" class="small-btn">확인</button>
+            </div>
+            <p id="phoneVerificationMsg" class="info-msg"></p>
+          </label>
+
+          <!-- 주소 -->
+          <label class="form-field">
+            <span>주소</span>
+            <div class="inline-input">
+              <input type="text" id="signupZipcode" placeholder="우편번호" readonly />
+              <button type="button" id="findAddressBtn" class="small-btn">우편번호 찾기</button>
+            </div>
+            <input type="text" id="signupAddress" placeholder="도로명 또는 지번주소" readonly />
+            <input type="text" id="signupAddressDetail" placeholder="상세주소를 입력하세요" />
+            <!-- 주소 검색 UI가 삽입될 영역 -->
+            <div id="address-search-wrap" class="address-search-wrap"></div>
+          </label>
+
+          <!-- 이메일 + 중복 체크 버튼 -->
+          <label class="form-field">
+            <span>이메일</span>
+            <div class="inline-input">
+              <input type="text" id="signupEmailId" placeholder="아이디" />
+              <span>@</span>
+              <input type="text" id="signupEmailDomain" placeholder="직접입력" />
+            </div>
+            <div class="inline-input" style="margin-top: 6px;">
+              <select id="signupEmailDomainSelect">
+                <option value="직접입력">직접입력</option>
+                <option value="naver.com">naver.com</option>
+                <option value="gmail.com">gmail.com</option>
+                <option value="daum.net">daum.net</option>
+                <option value="kakao.com">kakao.com</option>
+              </select>
+            </div>
+            <div class="inline-input">
+              <button type="button" id="checkEmailBtn" class="small-btn">중복체크</button>
+            </div>
+          </label>
+
+          <!-- 비밀번호 + 눈 아이콘 -->
+          <label class="form-field">
+            <span>비밀번호</span>
+            <div class="password-wrapper">
+              <input type="password" id="signupPassword" placeholder="비밀번호를 입력하세요" />
+              <button type="button" class="eye-btn" data-target-input="signupPassword">
+                👁
+              </button>
+            </div>
+          </label>
+          <p class="field-rule">비밀번호는 8자 이상, 영문/숫자/특수문자 중 2가지 이상 조합해주세요.</p>
+
+          <!-- 비밀번호 확인 -->
+          <label class="form-field">
+            <span>비밀번호 확인</span>
+            <input type="password" id="signupPasswordConfirm" placeholder="비밀번호를 다시 입력하세요" />
+            <p id="passwordConfirmMsg" class="error-msg"></p>
+          </label>
+
+          <!-- 비밀번호 강도 막대바 -->
+          <div class="password-strength">
+            <div class="strength-bar">
+              <div id="strengthFill" class="strength-fill"></div>
+            </div>
+            <p id="strengthText" class="info-msg"></p>
+          </div>
+
+          <!-- 비밀번호 찾기 질문/답변 -->
+          <label class="form-field">
+            <span>비밀번호 찾기 질문</span>
+            <select id="signupSecurityQuestion"></select>
+          </label>
+          <label class="form-field">
+            <span>답변</span>
+            <input type="text" id="signupSecurityAnswer" placeholder="질문에 대한 답변을 입력하세요" />
+          </label>
+
+          <!-- 개인정보 제공 동의 및 약관 안내 -->
+          <div class="terms-box">
+            <h3>약관 동의</h3>
+            <div class="terms-content">
+              <strong>제1조 (목적)</strong> 이 약관은 My diary가 제공하는 서비스의 이용과 관련하여 회사와 회원과의 권리, 의무 및 책임사항, 기타 필요한 사항을 규정함을 목적으로
+              합니다.<br>
+              <strong>제2조 (정의)</strong> ... (이하 약관 내용 생략) ...
+            </div>
+            <label class="checkbox-field">
+              <input type="checkbox" id="agreeServiceTerms" />
+              <span>이용약관에 동의합니다. (필수)</span>
+            </label>
+            <label class="checkbox-field">
+              <input type="checkbox" id="agreeTerms" />
+              <span>개인정보 수집 및 이용에 동의합니다. (필수)</span>
+            </label>
+          </div>
+
+          <!-- 회원가입 버튼 -->
+          <button id="signupBtn" class="primary-btn">회원가입</button>
+
+          <!-- 회원가입 관련 메시지 표시 -->
+          <p id="signupMsg" class="info-msg"></p>
+        </div>
+      </section>
+
+      <!-- 3) 프로필 설정 섹션 -->
+      <section id="profile-section" class="view-section">
+        <div class="form-card">
+          <h2>프로필 설정</h2>
+
+          <!-- 프로필 사진 영역 -->
+          <div class="profile-photo-area">
+            <!-- 프로필 이미지 (기본 이미지는 CSS로 배경색/아이콘 처리) -->
+            <div id="profileImagePreview" class="profile-image"></div>
+            <label class="small-file-label">
+              프로필 사진 업로드
+              <input type="file" id="profileImageInput" accept="image/*" />
+            </label>
+          </div>
+
+          <!-- 기본 사용자 정보 -->
+          <div class="info-box">
+            <h3>기본 정보</h3>
+            <p><strong>이름:</strong> <span id="profileName"></span></p>
+            <p><strong>아이디(이메일):</strong> <span id="profileEmail"></span></p>
+            <p><strong>닉네임:</strong> <span id="profileNickname"></span></p>
+            <p><strong>가입일:</strong> <span id="profileJoinDate"></span></p>
+          </div>
+
+          <!-- 개인정보 관리 : 내 정보 수정, 비밀번호 변경 -->
+          <div class="info-box">
+            <h3>개인정보 관리</h3>
+            <label class="form-field">
+              <span>이름 변경</span>
+              <input type="text" id="editName" placeholder="새 이름을 입력하세요" />
+            </label>
+            <label class="form-field">
+              <span>닉네임 변경</span>
+              <input type="text" id="editNickname" placeholder="새 닉네임을 입력하세요" />
+            </label>
+            <label class="form-field">
+              <span>주소 변경</span>
+              <input type="text" id="editAddress" placeholder="새 주소를 입력하세요" />
+            </label>
+            <button id="updateProfileBtn" class="secondary-btn">정보 수정 저장</button>
+            <p id="updateProfileMsg" class="info-msg"></p>
+
+            <hr />
+
+            <h4>비밀번호 변경</h4>
+            <label class="form-field">
+              <span>현재 비밀번호</span>
+              <input type="password" id="currentPassword" />
+            </label>
+            <label class="form-field">
+              <span>새 비밀번호</span>
+              <input type="password" id="newPassword" />
+            </label>
+            <label class="form-field">
+              <span>새 비밀번호 확인</span>
+              <input type="password" id="newPasswordConfirm" />
+            </label>
+            <button id="changePasswordBtn" class="secondary-btn">비밀번호 변경</button>
+            <p id="changePasswordMsg" class="info-msg"></p>
+          </div>
+
+          <!-- 로그인 기록 -->
+          <div class="info-box">
+            <h3>로그인 기록 (최근 5건)</h3>
+            <div class="login-history-table-wrapper">
+              <table id="loginHistoryTable">
+                <thead>
+                  <tr>
+                    <th>접속 시간</th>
+                    <th>접속 기기</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- JS로 채워질 영역 -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- 계정 로그아웃 및 회원탈퇴 -->
+          <div class="danger-zone">
+            <button id="logoutBtn" class="secondary-btn">로그아웃</button>
+            <button id="deleteAccountBtn" class="danger-btn">회원탈퇴</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- 외부 JS 파일 연결 -->
+  <!-- 카카오 우편번호 찾기 서비스 -->
+  <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>
