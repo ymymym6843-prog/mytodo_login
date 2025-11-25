@@ -1,19 +1,25 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Todo</title>
+    <title>To-Do List</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body class="light-mode">
     <div class="container">
         <div class="header-controls">
-            <h1>My Todo</h1>
-            <!-- 라이트/다크 토글 버튼 -->
-            <button id="themeToggleBtn" class="theme-toggle">다크 모드</button>
+            <h1>To Do List</h1>
+            <div class="header-buttons">
+                <button id="profileBtn" class="profile-btn">프로필</button>
+                <button id="logoutBtn" class="logout-btn">로그아웃</button>
+                <!-- 라이트/다크 토글 버튼 -->
+                <button id="themeToggleBtn" class="theme-toggle">다크 모드</button>
+            </div>
         </div>
-        
+
         <!-- 검색 + 필터 -->
         <div class="controls-bar">
             <input type="text" id="taskSearchInput" placeholder="할 일 검색...">
@@ -36,7 +42,7 @@
             <input type="text" id="taskInput" placeholder="할 일을 입력하세요.">
             <button id="addTaskBtn">추가</button>
         </div>
-        
+
         <!-- 카테고리 ~ 날짜 + 시간 (작게) -->
         <div class="task-details-area">
             <select id="categorySelect">
@@ -113,6 +119,86 @@
         <ul id="taskList"></ul>
     </div>
 
+    <!-- 프로필 모달 -->
+    <div id="profileModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>프로필 설정</h2>
+
+            <div class="profile-info">
+                <h3>기본 정보</h3>
+                <p><strong>이메일:</strong> <span id="userEmail">-</span></p>
+                <p><strong>닉네임:</strong> <span id="userNickname">-</span></p>
+                <p><strong>이름:</strong> <span id="userName">-</span></p>
+                <p><strong>가입일:</strong> <span id="userCreatedAt">-</span></p>
+            </div>
+
+            <div class="profile-photo">
+                <h3>프로필 사진</h3>
+                <div class="photo-preview">
+                    <img id="profilePhotoPreview" src="/uploads/profiles/default-avatar.png" alt="프로필 사진"
+                        onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgZmlsbD0iI2RkZCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDgiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj7wn5SnPC90ZXh0Pjwvc3ZnPg=='">
+                </div>
+                <input type="file" id="profilePhotoInput" accept="image/*" style="display: none;">
+                <button id="selectPhotoBtn" class="btn-secondary">사진 선택</button>
+                <button id="uploadPhotoBtn" class="btn-primary" style="display: none;">업로드</button>
+                <p id="photoUploadMsg" class="message"></p>
+            </div>
+
+            <div class="profile-edit">
+                <h3>정보 수정</h3>
+                <label>
+                    <span>이름:</span>
+                    <input type="text" id="editName" placeholder="새 이름">
+                </label>
+                <label>
+                    <span>닉네임:</span>
+                    <input type="text" id="editNickname" placeholder="새 닉네임">
+                </label>
+                <label>
+                    <span>주소:</span>
+                    <input type="text" id="editAddress" placeholder="새 주소">
+                </label>
+                <label>
+                    <span>전화번호:</span>
+                    <input type="text" id="editPhone" placeholder="새 전화번호">
+                </label>
+                <button id="updateProfileBtn" class="btn-primary">정보 수정</button>
+                <p id="profileUpdateMsg" class="message"></p>
+            </div>
+
+            <div class="profile-password">
+                <h3>비밀번호 변경</h3>
+                <label>
+                    <span>현재 비밀번호:</span>
+                    <input type="password" id="currentPassword" placeholder="현재 비밀번호">
+                </label>
+                <label>
+                    <span>새 비밀번호:</span>
+                    <input type="password" id="newPassword" placeholder="새 비밀번호">
+                </label>
+                <label>
+                    <span>새 비밀번호 확인:</span>
+                    <input type="password" id="newPasswordConfirm" placeholder="새 비밀번호 확인">
+                </label>
+                <button id="changePasswordBtn" class="btn-primary">비밀번호 변경</button>
+                <p id="passwordChangeMsg" class="message"></p>
+            </div>
+
+            <div class="profile-delete">
+                <h3>회원 탈퇴</h3>
+                <p class="warning-text">⚠️ 회원 탈퇴 시 모든 데이터가 영구적으로 삭제되며 복구할 수 없습니다.</p>
+                <label>
+                    <span>비밀번호 확인:</span>
+                    <input type="password" id="deleteAccountPassword" placeholder="비밀번호를 입력하세요">
+                </label>
+                <button id="deleteAccountBtn" class="btn-danger">회원 탈퇴</button>
+                <p id="deleteAccountMsg" class="message"></p>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
+
 </html>

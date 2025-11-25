@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+
+# Environment Variables
+.env
+
+# Uploaded Files
+public/uploads/
+
+# Log files
+*.log
+npm-debug.log*
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+*.tmp
+*.temp
+
+# Database dumps
+*.sql.backup
+
+# Original source folders (already integrated)
+Login_test-main/
+TodoList-main/
