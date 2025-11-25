@@ -57,62 +57,226 @@ mydiary_login/
 
 ### 1. 사전 요구사항
 
-- **Node.js** v14 이상
-- **MariaDB** 또는 **MySQL** v10 이상
+시작하기 전에 다음 프로그램들이 설치되어 있어야 합니다:
 
-### 2. 프로젝트 클론
+#### Node.js 설치 확인
+```bash
+node --version
+# 출력 예: v18.17.0 (v14 이상이면 OK)
+
+npm --version
+# 출력 예: 9.6.7
+```
+
+Node.js가 설치되어 있지 않다면:
+- **다운로드**: https://nodejs.org/ 에서 LTS 버전 다운로드
+- **권장 버전**: v18 이상
+
+#### MariaDB/MySQL 설치 확인
+```bash
+mysql --version
+# 출력 예: mysql Ver 15.1 Distrib 10.11.6-MariaDB (v10 이상이면 OK)
+```
+
+MariaDB/MySQL이 설치되어 있지 않다면:
+- **MariaDB**: https://mariadb.org/download/
+- **MySQL**: https://dev.mysql.com/downloads/mysql/
+
+---
+
+### 2. 프로젝트 클론 (Git Clone)
+
+#### ✅ Git 저장소에서 프로젝트 복사
+
+먼저 프로젝트를 저장할 폴더로 이동합니다:
 
 ```bash
-git clone <repository-url>
+# Windows (원하는 경로로 이동)
+cd C:\Users\YourName\Documents
+
+# Mac/Linux
+cd ~/Documents
+```
+
+GitHub 저장소를 클론합니다:
+
+```bash
+# HTTPS 방식 (권장)
+git clone https://github.com/YOUR_USERNAME/mydiary_login.git
+
+# SSH 방식 (SSH 키가 설정된 경우)
+git clone git@github.com:YOUR_USERNAME/mydiary_login.git
+```
+
+> **참고**: `YOUR_USERNAME`은 실제 GitHub 사용자명으로 변경해주세요!
+
+클론한 프로젝트 폴더로 이동:
+
+```bash
 cd mydiary_login
 ```
 
-### 3. 환경 변수 설정
+**예상 결과:**
+```
+Cloning into 'mydiary_login'...
+remote: Enumerating objects: 125, done.
+remote: Counting objects: 100% (125/125), done.
+remote: Compressing objects: 100% (85/85), done.
+Receiving objects: 100% (125/125), 45.23 KiB | 2.12 MiB/s, done.
+```
 
-`.env.example` 파일을 복사하여 `.env` 파일을 생성하고 본인의 설정값으로 수정합니다:
+---
 
+### 3. 환경 변수 설정 (.env 파일 생성)
+
+#### ✅ .env.example 파일을 복사하여 .env 파일 생성
+
+프로젝트에는 `.env.example` 템플릿 파일이 포함되어 있습니다. 이를 복사하여 `.env` 파일을 만듭니다:
+
+**Windows (명령 프롬프트 또는 PowerShell):**
 ```bash
-# Windows
 copy .env.example .env
+```
 
-# Linux/Mac
+**Mac/Linux (터미널):**
+```bash
 cp .env.example .env
 ```
 
-`.env` 파일 내용:
+#### ✅ .env 파일 편집
+
+`.env` 파일을 텍스트 에디터(VS Code, 메모장 등)로 열고 본인의 환경에 맞게 수정합니다:
+
 ```env
 # Database Configuration
-DB_HOST=localhost
-DB_USER=root
-DB_PASSWORD=your_database_password_here
-DB_NAME=mytodo
+DB_HOST=localhost                           # 데이터베이스 서버 주소 (로컬이면 localhost)
+DB_USER=root                                # 데이터베이스 사용자명
+DB_PASSWORD=your_database_password_here     # ⚠️ 본인의 MariaDB/MySQL 비밀번호로 변경!
+DB_NAME=mytodo                              # 데이터베이스 이름 (변경 가능)
 
 # Server Configuration
-PORT=3000
+PORT=3000                                   # 서버 포트 (기본 3000, 충돌 시 3001 등으로 변경)
 
 # Session Configuration
-SESSION_SECRET=your_session_secret_key_here
+SESSION_SECRET=your_session_secret_key_here # ⚠️ 랜덤한 문자열로 변경! (예: my_super_secret_key_12345)
 ```
+
+**⚠️ 중요:**
+- `DB_PASSWORD`: 본인의 MariaDB/MySQL 루트 비밀번호 입력
+- `SESSION_SECRET`: 보안을 위해 랜덤한 문자열로 변경 (예: `mysecret2024!@#`)
+
+**예시:**
+```env
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=mypassword123
+DB_NAME=mytodo
+PORT=3000
+SESSION_SECRET=random_secret_key_abc123xyz
+```
+
+---
 
 ### 4. 데이터베이스 설정
 
-MariaDB 서버가 실행 중인지 확인한 후, 스키마를 생성합니다:
+#### ✅ MariaDB/MySQL 서버 실행 확인
+
+**Windows:**
+- 작업 관리자 → 서비스 탭 → "MySQL" 또는 "MariaDB" 서비스 확인
+- 또는 `services.msc` 실행 후 확인
+
+**Mac (Homebrew):**
+```bash
+brew services start mariadb
+# 또는
+brew services start mysql
+```
+
+**Linux (Ubuntu/Debian):**
+```bash
+sudo systemctl start mariadb
+# 또는
+sudo systemctl start mysql
+```
+
+#### ✅ 데이터베이스 스키마 생성
+
+프로젝트에 포함된 `schema.sql` 파일을 실행하여 데이터베이스와 테이블을 생성합니다.
+
+**방법 1: MySQL 명령줄에서 직접 실행 (권장)**
 
 ```bash
-# MariaDB에 로그인
+# 1. MariaDB/MySQL에 접속
 mysql -u root -p
+# 비밀번호 입력
 
-# 스키마 파일 실행
-source schema.sql
+# 2. 스키마 파일 실행 (MySQL 프롬프트 내에서)
+source schema.sql;
 
-# 또는 명령줄에서 직접:
+# 3. 데이터베이스 생성 확인
+SHOW DATABASES;
+USE mytodo;
+SHOW TABLES;
+
+# 4. 종료
+exit;
+```
+
+**방법 2: 명령줄에서 한 번에 실행**
+
+**Windows (명령 프롬프트):**
+```bash
 mysql -u root -p < schema.sql
 ```
 
-### 5. 패키지 설치
+**Mac/Linux:**
+```bash
+mysql -u root -p < schema.sql
+```
+
+**예상 결과:**
+```
+Database changed
+Query OK, 0 rows affected
+Query OK, 0 rows affected
+Query OK, 0 rows affected
+```
+
+데이터베이스가 올바르게 생성되었는지 확인:
+```bash
+mysql -u root -p -e "USE mytodo; SHOW TABLES;"
+```
+
+**출력 예시:**
+```
++-------------------+
+| Tables_in_mytodo  |
++-------------------+
+| todos            |
+| users            |
++-------------------+
+```
+
+---
+
+### 5. 패키지 설치 (npm install)
+
+#### ✅ Node.js 의존성 패키지 설치
+
+프로젝트 폴더에서 다음 명령어를 실행합니다:
 
 ```bash
 npm install
+```
+
+**예상 결과:**
+```
+added 92 packages, and audited 93 packages in 8s
+
+8 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
 ```
 
 설치되는 주요 패키지:
@@ -123,17 +287,110 @@ npm install
 - `multer` - 파일 업로드
 - `dotenv` - 환경 변수 관리
 
+**⚠️ 주의:**
+- 인터넷 연결 필요
+- 설치 시간: 약 1~5분 (네트워크 속도에 따라 다름)
+- `node_modules/` 폴더가 생성됩니다 (Git에 포함되지 않음)
+
+---
+
 ### 6. 서버 실행
+
+#### ✅ Node.js 서버 시작
+
+모든 설정이 완료되었으면 서버를 실행합니다:
 
 ```bash
 npm start
-# 또는
+```
+
+또는:
+
+```bash
 node server.js
 ```
 
-서버가 성공적으로 시작되면:
-- **로그인 페이지**: http://localhost:3000 또는 http://localhost:3000/login/index.html
-- **Todo 페이지**: http://localhost:3000/todo/index.html (로그인 필요)
+**예상 성공 메시지:**
+```
+========================================
+✅ 서버가 http://localhost:3000 에서 실행 중입니다
+========================================
+✅ MariaDB 데이터베이스 연결 성공!
+```
+
+**⚠️ 오류가 발생하는 경우:**
+- `ECONNREFUSED`: MariaDB 서버가 실행 중인지 확인
+- `ER_ACCESS_DENIED_ERROR`: `.env` 파일의 `DB_PASSWORD` 확인
+- `EADDRINUSE`: 3000번 포트가 이미 사용 중 → `.env`에서 `PORT=3001`로 변경
+
+---
+
+### 7. 브라우저에서 접속
+
+#### ✅ 웹 애플리케이션 열기
+
+서버가 성공적으로 실행되면 브라우저를 열고 다음 주소로 접속합니다:
+
+**로그인/회원가입 페이지:**
+```
+http://localhost:3000
+```
+또는
+```
+http://localhost:3000/login/index.html
+```
+
+**Todo 페이지 (로그인 후):**
+```
+http://localhost:3000/todo/index.html
+```
+
+#### ✅ 첫 번째 사용자 생성
+
+1. 로그인 페이지에서 **"회원가입"** 탭 클릭
+2. 필수 정보 입력 (이름, 닉네임, 이메일, 비밀번호 등)
+3. **휴대전화 인증** 클릭 → 팝업에서 데모 인증번호 `123456` 확인
+4. 회원가입 완료 → Todo 페이지로 자동 이동
+
+---
+
+### 8. 서버 종료
+
+서버를 중지하려면 터미널/명령 프롬프트에서:
+
+```
+Ctrl + C
+```
+
+---
+
+## 📋 빠른 시작 요약
+
+전체 과정을 한눈에 정리하면:
+
+```bash
+# 1. 프로젝트 클론
+git clone https://github.com/YOUR_USERNAME/mydiary_login.git
+cd mydiary_login
+
+# 2. 환경 변수 설정
+copy .env.example .env          # Windows
+# cp .env.example .env          # Mac/Linux
+# .env 파일을 열어 DB_PASSWORD와 SESSION_SECRET 수정!
+
+# 3. 데이터베이스 생성
+mysql -u root -p < schema.sql
+
+# 4. 패키지 설치
+npm install
+
+# 5. 서버 실행
+npm start
+
+# 6. 브라우저에서 http://localhost:3000 접속
+```
+
+**소요 시간:** 약 5~10분 (사전 요구사항이 설치된 경우)
 
 ## 📖 사용 방법
 
